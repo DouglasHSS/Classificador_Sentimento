@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ce809c8-46c8-4344-8724-f6c57c0cfcaf" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Classificando_Sentimentos.iml" afterPath="$PROJECT_DIR$/.idea/Classificando_Sentimentos.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/utils.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
@@ -41,24 +40,35 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1764">
-              <caret line="191" column="29" lean-forward="false" selection-start-line="191" selection-start-column="29" selection-end-line="191" selection-end-column="29" />
+            <state relative-caret-position="187">
+              <caret line="23" column="3" lean-forward="true" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
               <folding>
-                <element signature="e#24#37#0" expanded="true" />
-                <element signature="e#361#540#0" expanded="false" />
-                <element signature="e#569#940#0" expanded="false" />
-                <element signature="e#971#1626#0" expanded="false" />
-                <element signature="e#1806#2314#0" expanded="false" />
-                <element signature="e#2445#3211#0" expanded="false" />
-                <element signature="e#4011#4703#0" expanded="false" />
-                <element signature="e#4758#5396#0" expanded="false" />
-                <element signature="e#5458#5715#0" expanded="false" />
+                <element signature="e#24#33#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="classificador.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classificador.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#25#45#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -69,6 +79,7 @@
       <find>@return</find>
       <find>separar_tokens</find>
       <find>tokenizar</find>
+      <find>STOPWORDS</find>
     </findStrings>
     <replaceStrings>
       <replace>dict_palavras</replace>
@@ -82,6 +93,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/utils.py" />
+        <option value="$PROJECT_DIR$/classificador.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -140,24 +153,6 @@
               <option name="myItemId" value="reviews" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Classificando_Sentimentos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Classificando_Sentimentos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reviews" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -169,6 +164,9 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Reviwes" />
     </key>
@@ -386,6 +384,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-11" width="1368" height="780" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19924243" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -395,7 +394,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972136" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4009288" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38390094" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39969134" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -433,15 +432,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24#37#0" expanded="true" />
-            <element signature="e#361#540#0" expanded="false" />
-            <element signature="e#569#940#0" expanded="false" />
-            <element signature="e#971#1626#0" expanded="false" />
-            <element signature="e#1806#2314#0" expanded="false" />
-            <element signature="e#2445#3211#0" expanded="false" />
-            <element signature="e#4011#4703#0" expanded="false" />
-            <element signature="e#4758#5396#0" expanded="false" />
-            <element signature="e#5458#5715#0" expanded="false" />
+            <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -451,15 +442,7 @@
         <state relative-caret-position="1296">
           <caret line="132" column="70" lean-forward="true" selection-start-line="132" selection-start-column="33" selection-end-line="132" selection-end-column="70" />
           <folding>
-            <element signature="e#24#37#0" expanded="true" />
-            <element signature="e#361#540#0" expanded="false" />
-            <element signature="e#569#940#0" expanded="false" />
-            <element signature="e#971#1626#0" expanded="false" />
-            <element signature="e#1806#2314#0" expanded="false" />
-            <element signature="e#2445#3211#0" expanded="false" />
-            <element signature="e#4011#4703#0" expanded="false" />
-            <element signature="e#4758#5396#0" expanded="false" />
-            <element signature="e#5458#5715#0" expanded="false" />
+            <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -469,15 +452,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24#37#0" expanded="true" />
-            <element signature="e#361#540#0" expanded="false" />
-            <element signature="e#569#940#0" expanded="false" />
-            <element signature="e#971#1626#0" expanded="false" />
-            <element signature="e#1806#2314#0" expanded="false" />
-            <element signature="e#2445#3211#0" expanded="false" />
-            <element signature="e#4011#4703#0" expanded="false" />
-            <element signature="e#4758#5396#0" expanded="false" />
-            <element signature="e#5458#5715#0" expanded="false" />
+            <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -539,20 +514,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1764">
-          <caret line="191" column="29" lean-forward="false" selection-start-line="191" selection-start-column="29" selection-end-line="191" selection-end-column="29" />
+        <state relative-caret-position="70">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#24#37#0" expanded="true" />
-            <element signature="e#361#540#0" expanded="false" />
-            <element signature="e#569#940#0" expanded="false" />
-            <element signature="e#971#1626#0" expanded="false" />
-            <element signature="e#1806#2314#0" expanded="false" />
-            <element signature="e#2445#3211#0" expanded="false" />
-            <element signature="e#4011#4703#0" expanded="false" />
-            <element signature="e#4758#5396#0" expanded="false" />
-            <element signature="e#5458#5715#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classificador.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#25#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="23" column="3" lean-forward="true" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
+          <folding>
+            <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
