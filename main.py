@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import string
 
+from collections import Counter
 from math import log
-from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk.classify import NaiveBayesClassifier, accuracy
 from random import shuffle
 from unicodedata import normalize
 
 
-STOPWORDS = stopwords.words('english')
-PONTUACAO = string.punctuation
+STOPWORDS = set(stopwords.words('english'))
+PONTUACAO = set(string.punctuation)
 
 
 def normalizar_texto(texto):
@@ -22,15 +22,16 @@ def normalizar_texto(texto):
     return normalize('NFKD', texto).lower()
 
 
-def separar_tokens(texto):
-    """Função que retornar os tokens. Stopwords e pontuações serão removidas.
+def tokenizar(texto):
+    """Função de tokenização de um texto. Stopwords e Pontuações serão removidas.
         :param texto: :unicode:
 
-        :return :set: de tokens
+        :return :dict: key:token value:frequencia
     """
-    return (set(normalizar_texto(texto).split())
-            .difference(STOPWORDS)
-            .difference(PONTUACAO))
+    counter = Counter(normalizar_texto(texto).split())
+    return {token: frequencia
+            for token, frequencia in counter.items()
+            if token not in STOPWORDS or token not in PONTUACAO}
 
 
 class Palavra(object):
@@ -83,7 +84,7 @@ class ClassificadorSentimento(object):
     # #####################
 
     def _criar_bow(self, arquivos):
-        """Method que cria uma bag of words de um corpus.
+        """Method que cria uma bag of words de um conjunto de arquivos.
             :param arquivos: :list: dos caminhos dos arquivos do corpus.
 
             :return :list: de :Palavra:
@@ -94,7 +95,7 @@ class ClassificadorSentimento(object):
             arquivo = open(caminho_arquivo, mode="r")
             texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
 
-            for palavra in separar_tokens(texto_arquivo):
+            for palavra in tokenizar(texto_arquivo).keys():
                 try:
                     dict_palavras[palavra].add_ocorrencia()
                 except KeyError:
@@ -116,8 +117,9 @@ class ClassificadorSentimento(object):
             for caminho_arquivo in arquivos:
                 arquivo = open(caminho_arquivo, mode="r")
                 texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
+                tokens = tokenizar(texto_arquivo)
 
-                lista_treinamento.append((self.extrair_caracteristicas(texto_arquivo), classe))
+                lista_treinamento.append((self.extrair_caracteristicas(tokens), classe))
 
         shuffle(lista_treinamento)
 
@@ -127,16 +129,17 @@ class ClassificadorSentimento(object):
     # # MÉTODOS PÚBLICOS ##
     # #####################
 
-    def extrair_caracteristicas(self, texto):
+    def extrair_caracteristicas(self, tokens):
         """Method que cria uma bag of words de um corpus.
-            :param texto: :unicode: que terá as caracteristicas extraidas.
+            :param tokens: :dict: key:token value:frequencia
 
             :return :dict: com as caracteristicas extraidas
         """
-        frequencia = FreqDist(texto.split())
+        numero_tokens = sum(tokens.values())
 
         def calcular_tf(palavra_obj):
-            return float(frequencia[palavra_obj.palavra])/len(texto)
+            frequencia_token = tokens.get(palavra_obj.palavra, 0)
+            return float(frequencia_token)/numero_tokens
 
         def somar_tf_idf(bag_of_words):
             return sum(calcular_tf(palavra_obj) * palavra_obj.idf
@@ -155,8 +158,9 @@ class ClassificadorSentimento(object):
         for caminho_arquivo in arquivos:
             arquivo = open(caminho_arquivo, mode="r")
             texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
+            tokens = tokenizar(texto_arquivo)
 
-            lista_de_caracteristicas.append((self.extrair_caracteristicas(texto_arquivo)))
+            lista_de_caracteristicas.append((self.extrair_caracteristicas(tokens)))
 
         return self.classificador.classify_many(lista_de_caracteristicas)
 
@@ -179,10 +183,10 @@ def caso_de_teste():
                          for nome_arquivo in os.listdir("./reviews/neg")]
 
     print "Inicializando o classificador..."
-    classificador = ClassificadorSentimento(reviews_positivos[:500],
-                                            reviews_negativos[:500])
+    classificador = ClassificadorSentimento(reviews_positivos[:100],
+                                            reviews_negativos[:100])
 
-    conjunto_teste = reviews_negativos[900:] + reviews_positivos[900:]
+    conjunto_teste = reviews_negativos[50:] + reviews_positivos[50:]
     print "Classificando Reviews de teste..."
     print classificador.classificar_reviews(conjunto_teste)
     print "Teste Finalizado!"
