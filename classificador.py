@@ -37,16 +37,12 @@ class ClassificadorSentimento(object):
     # # CONSTRUTOR ##
     # ###############
 
-    def __init__(self, reviews_positivos, reviews_negativos):
+    def __init__(self, dict_arquivos):
         """
-        :param reviews_positivos: :list: dos arquivos positivos que treinarão o classificador.
-        :param reviews_negativos: :list: dos arquivos negativos que treinarão o classificador.
+        :param dict_arquivos: dicionario contendo os arquivos separados por classes.
         """
-
-        self.conjunto_treinamento = {"positivo": [], "negativo": []}
-
-        self.bag_of_words = self._criar_bow(dict_arquivos={"positivo": reviews_positivos,
-                                                           "negativo": reviews_negativos})
+        self._inicializar_variaveis(dict_arquivos)
+        self._calcular_idf(dict_arquivos)
 
         self._treinar_classificador()
 
@@ -54,17 +50,23 @@ class ClassificadorSentimento(object):
     # # MÉTODOS PRIVADOS ##
     # #####################
 
-    def _criar_bow(self, dict_arquivos):
-        """Metodo que cria a bag of words de um conjunto de arquivos.
-            :param dict_arquivos: :dict: key: classe dos arquivo value: :list: dos arquivos
+    def _inicializar_variaveis(self, dict_arquivos):
+        """Método para inicialização de elementos.
+           Será criado a bag of words do classificador, bem como conjunto de dados utilizado no
+           treinamento do classificador.
 
-            :return :list: de :Palavra:
+            :param dict_arquivos:  dicionario contendo os arquivos separados por classes.
+
+            :return :None:
         """
-        dict_palavras = {}
-        count = 0
+        palavras = {}
+        dados_treinamento = {}
+
         for classe, arquivos in dict_arquivos.items():
+
+            dados_treinamento[classe] = []
+
             for caminho_arquivo in arquivos:
-                count += 1
                 arquivo = open(caminho_arquivo, mode="r")
                 texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
 
@@ -72,19 +74,29 @@ class ClassificadorSentimento(object):
 
                 for palavra in tokens.keys():
                     try:
-                        dict_palavras[palavra].add_ocorrencia()
+                        palavras[palavra].add_ocorrencia()
                     except KeyError:
-                        dict_palavras[palavra] = Palavra(palavra=palavra)
+                        palavras[palavra] = Palavra(palavra=palavra)
 
-                self.conjunto_treinamento[classe].append(tokens)
+                dados_treinamento[classe].append(tokens)
 
-        for palavra in dict_palavras.values():
-            palavra.calcular_idf(count)
+        self.bag_of_words = palavras.values()
+        self.conjunto_treinamento = dados_treinamento
 
-        return dict_palavras.values()
+    def _calcular_idf(self, dict_arquivos):
+        """Método que calcula o idf de cada palavra na bag word.
+            :param dict_arquivos: dicionario contendo os arquivos separados por classes.
+
+            :return :None:
+        """
+        total_arquivos = sum(len(arquivos)
+                             for arquivos in dict_arquivos.values())
+
+        for palavra in self.bag_of_words:
+            palavra.calcular_idf(total_arquivos)
 
     def _treinar_classificador(self):
-        """ Método que treina o classificador
+        """Método que treina o classificador
 
             :return: :None:
         """
@@ -92,18 +104,15 @@ class ClassificadorSentimento(object):
 
         for classe, lista_textos in self.conjunto_treinamento.items():
             for textos_tokenizados in lista_textos:
-                lista_treinamento.append((self.extrair_caracteristicas(textos_tokenizados),
-                                          classe))
+                caracteristicas = self._extrair_caracteristicas(textos_tokenizados)
+                lista_treinamento.append((caracteristicas, classe))
+
         shuffle(lista_treinamento)
 
         self.classificador = NaiveBayesClassifier.train(lista_treinamento)
-
-    # #####################
-    # # MÉTODOS PÚBLICOS ##
-    # #####################
-
-    def extrair_caracteristicas(self, tokens):
-        """Metodo que extrai as caracteristicas de uma lista tokens de um review.
+    
+    def _extrair_caracteristicas(self, tokens):
+        """Método que extrai as caracteristicas de uma lista tokens de um review.
             :param tokens: :dict: key:token value:tf*idf
 
             :return :dict: com as caracteristicas extraidas
@@ -117,6 +126,10 @@ class ClassificadorSentimento(object):
         return {palavra.palavra: calcular_tf(palavra) * palavra.idf
                 for palavra in self.bag_of_words}
 
+    # #####################
+    # # MÉTODOS PÚBLICOS ##
+    # #####################
+
     def classificar_reviews(self, arquivos):
         """ Método que classifica uma lista de arquivos.
             :param arquivos: :list: dos caminhos dos arquivos a serem classificados.
@@ -129,7 +142,7 @@ class ClassificadorSentimento(object):
             texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
             tokens = tokenizar(texto_arquivo)
 
-            lista_de_caracteristicas.append((self.extrair_caracteristicas(tokens)))
+            lista_de_caracteristicas.append((self._extrair_caracteristicas(tokens)))
 
         return self.classificador.classify_many(lista_de_caracteristicas)
 

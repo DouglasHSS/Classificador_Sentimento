@@ -11,9 +11,9 @@ def caso_de_teste():
     reviews_negativos = [os.path.join("./reviews/neg", nome_arquivo)
                          for nome_arquivo in os.listdir("./reviews/neg")]
 
-    print "Inicializando o classificador..."
-    classificador = ClassificadorSentimento(reviews_positivos[:500],
-                                            reviews_negativos[:500])
+    print "Inicializando e treinando o classificador, essa operação pode levar alguns minutos..."
+    classificador = ClassificadorSentimento({"positivo": reviews_positivos[:500],
+                                             "negativo": reviews_negativos[:500]})
 
     conjunto_teste = reviews_negativos[900:] + reviews_positivos[900:]
     print "Classificando Reviews de teste..."

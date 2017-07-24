@@ -6,7 +6,7 @@ from nltk.corpus import stopwords
 from unicodedata import normalize
 
 
-STOPWORDS = set(stopwords.words('english'))
+# STOPWORDS = set(stopwords.words('english'))
 PONTUACAO = set(string.punctuation)
 
 
@@ -27,8 +27,8 @@ def tokenizar(texto):
     """
     tokens = Counter(normalizar_texto(texto).split())
 
-    for palavra in STOPWORDS.union(PONTUACAO):
-        if palavra in tokens:
-            tokens.pop(palavra)
+    for pontuacao in PONTUACAO:
+        if pontuacao in tokens:
+            tokens.pop(pontuacao)
 
     return tokens
