@@ -43,11 +43,10 @@ class ClassificadorSentimento(object):
         :param reviews_negativos: :list: dos arquivos negativos que treinarão o classificador.
         """
 
-        self.conjunto_treinamento = {"positivo": reviews_positivos,
-                                     "negativo": reviews_negativos}
+        self.conjunto_treinamento = {"positivo": [], "negativo": []}
 
-        self.bow_positiva = self._criar_bow(reviews_positivos)
-        self.bow_negativa = self._criar_bow(reviews_negativos)
+        self.bag_of_words = self._criar_bow(dict_arquivos={"positivo": reviews_positivos,
+                                                           "negativo": reviews_negativos})
 
         self._treinar_classificador()
 
@@ -55,26 +54,32 @@ class ClassificadorSentimento(object):
     # # MÉTODOS PRIVADOS ##
     # #####################
 
-    def _criar_bow(self, arquivos):
-        """Method que cria uma bag of words de um conjunto de arquivos.
-            :param arquivos: :list: dos caminhos dos arquivos do corpus.
+    def _criar_bow(self, dict_arquivos):
+        """Metodo que cria a bag of words de um conjunto de arquivos.
+            :param dict_arquivos: :dict: key: classe dos arquivo value: :list: dos arquivos
 
             :return :list: de :Palavra:
         """
         dict_palavras = {}
+        count = 0
+        for classe, arquivos in dict_arquivos.items():
+            for caminho_arquivo in arquivos:
+                count += 1
+                arquivo = open(caminho_arquivo, mode="r")
+                texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
 
-        for caminho_arquivo in arquivos:
-            arquivo = open(caminho_arquivo, mode="r")
-            texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
+                tokens = tokenizar(texto_arquivo)
 
-            for palavra in tokenizar(texto_arquivo).keys():
-                try:
-                    dict_palavras[palavra].add_ocorrencia()
-                except KeyError:
-                    dict_palavras[palavra] = Palavra(palavra=palavra)
+                for palavra in tokens.keys():
+                    try:
+                        dict_palavras[palavra].add_ocorrencia()
+                    except KeyError:
+                        dict_palavras[palavra] = Palavra(palavra=palavra)
+
+                self.conjunto_treinamento[classe].append(tokens)
 
         for palavra in dict_palavras.values():
-            palavra.calcular_idf(len(arquivos))
+            palavra.calcular_idf(count)
 
         return dict_palavras.values()
 
@@ -85,14 +90,10 @@ class ClassificadorSentimento(object):
         """
         lista_treinamento = []
 
-        for classe, arquivos in self.conjunto_treinamento.items():
-            for caminho_arquivo in arquivos:
-                arquivo = open(caminho_arquivo, mode="r")
-                texto_arquivo = " ".join(arquivo.readlines()).decode("utf-8")
-                tokens = tokenizar(texto_arquivo)
-
-                lista_treinamento.append((self.extrair_caracteristicas(tokens), classe))
-
+        for classe, lista_textos in self.conjunto_treinamento.items():
+            for textos_tokenizados in lista_textos:
+                lista_treinamento.append((self.extrair_caracteristicas(textos_tokenizados),
+                                          classe))
         shuffle(lista_treinamento)
 
         self.classificador = NaiveBayesClassifier.train(lista_treinamento)
@@ -102,8 +103,8 @@ class ClassificadorSentimento(object):
     # #####################
 
     def extrair_caracteristicas(self, tokens):
-        """Method que cria uma bag of words de um corpus.
-            :param tokens: :dict: key:token value:frequencia
+        """Metodo que extrai as caracteristicas de uma lista tokens de um review.
+            :param tokens: :dict: key:token value:tf*idf
 
             :return :dict: com as caracteristicas extraidas
         """
@@ -113,12 +114,8 @@ class ClassificadorSentimento(object):
             frequencia_token = tokens.get(palavra_obj.palavra, 0)
             return float(frequencia_token)/numero_tokens
 
-        def somar_tf_idf(bag_of_words):
-            return sum(calcular_tf(palavra_obj) * palavra_obj.idf
-                       for palavra_obj in bag_of_words)
-
-        return {"feature-positiva": somar_tf_idf(self.bow_positiva),
-                "feature-negativa": somar_tf_idf(self.bow_negativa)}
+        return {palavra.palavra: calcular_tf(palavra) * palavra.idf
+                for palavra in self.bag_of_words}
 
     def classificar_reviews(self, arquivos):
         """ Método que classifica uma lista de arquivos.

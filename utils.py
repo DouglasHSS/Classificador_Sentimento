@@ -25,7 +25,10 @@ def tokenizar(texto):
 
         :return :dict: key:token value:frequencia
     """
-    counter = Counter(normalizar_texto(texto).split())
-    return {token: frequencia
-            for token, frequencia in counter.items()
-            if token not in STOPWORDS or token not in PONTUACAO}
+    tokens = Counter(normalizar_texto(texto).split())
+
+    for palavra in STOPWORDS.union(PONTUACAO):
+        if palavra in tokens:
+            tokens.pop(palavra)
+
+    return tokens

@@ -12,10 +12,10 @@ def caso_de_teste():
                          for nome_arquivo in os.listdir("./reviews/neg")]
 
     print "Inicializando o classificador..."
-    classificador = ClassificadorSentimento(reviews_positivos[:100],
-                                            reviews_negativos[:100])
+    classificador = ClassificadorSentimento(reviews_positivos[:500],
+                                            reviews_negativos[:500])
 
-    conjunto_teste = reviews_negativos[50:] + reviews_positivos[50:]
+    conjunto_teste = reviews_negativos[900:] + reviews_positivos[900:]
     print "Classificando Reviews de teste..."
     print classificador.classificar_reviews(conjunto_teste)
     print "Teste Finalizado!"
